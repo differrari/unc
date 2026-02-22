@@ -1,0 +1,23 @@
+@includeC("redbuild.h")
+
+main {
+    rebuild_self();
+    defer emit_compile_commands();
+
+    new_module("unc");
+    
+    set_name("uncrypt");
+    
+    debug();
+    
+    set_target(target_native);
+    
+    set_package_type(package_bin);
+    
+    source("main.c");
+    
+    if (compile()){
+        gen_compile_commands(0);
+        run();
+    }
+}
