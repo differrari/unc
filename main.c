@@ -138,6 +138,8 @@ void bigint_modulo(bigint *n, bigint *d){
     
     memcpy(n->num, buffer->num, buffer->digits*sizeof(u16));
     n->digits = buffer->digits;
+    release(mulbuf);
+    release(cc);
     release(buffer);
 }
 
