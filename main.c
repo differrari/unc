@@ -164,9 +164,7 @@ bigint* bigint_pow_mod(bigint *bin, u64 e, bigint *mod){
     return result;
 }
 
-int main(int argc, char *argv[]){
-    print("Hallo, wereld!");
-    
+void rsa_demo(){
     i64 p = 61;//Private TODO: calculate
     i64 q = 53;//Private TODO: calculate
     
@@ -193,11 +191,58 @@ int main(int argc, char *argv[]){
         print("Encrypted %i = %i",i,c->num[i]);
     }
     
+    print("================");
+    
     c = bigint_pow_mod(c, d, bign);
     
     for (int i = 0; i < c->digits; i++){
         print("Decrypted %i = %i",i,c->num[i]);
     }
+}
+
+void dh_demo(){
+    
+    bigint *p = u64_to_bigint(23);//public
+    bigint *g = u64_to_bigint(5);//public
+    
+    i64 a = 4;//private
+    i64 b = 3;//private
+    
+    bigint *A = bigint_pow_mod(g, a, p);
+    
+    print("Alice's public key: ");
+    for (int i = 0; i < A->digits; i++){
+        print("Decrypted %i = %i",i,A->num[i]);
+    }
+    
+    bigint *B = bigint_pow_mod(g, b, p);
+    
+    print("Bob's public key: ");
+    for (int i = 0; i < B->digits; i++){
+        print("Decrypted %i = %i",i,B->num[i]);
+    }
+    
+    bigint *sh1 = bigint_pow_mod(A, b, p);
+    bigint *sh2 = bigint_pow_mod(B, a, p);
+    
+    bool match = true;
+    for (int i = 0; i < sh1->digits && i < sh2->digits; i++){
+        match &= sh1->num[i] == sh2->num[i];
+        if (!match){
+            print("Error: Shared key does not match on digit %i = %i vs %i",i,sh1->num[i],sh2->num[i]);
+            return;
+        } else print("%i. %i == %i",i,sh1->num[i],sh2->num[i]);
+    }
+    
+    if (match)
+        print("Shared secret match");
+    
+}
+
+int main(int argc, char *argv[]){
+    print("Hallo, wereld!");
+    
+    dh_demo();
     
     return 0;
 }
